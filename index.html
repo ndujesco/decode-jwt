@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Examination Number </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Get Exam Number.</h1>
+    <input type="text" id="urlInput" placeholder="Paste the URL here" style="width: 80%; padding: 10px;">
+    <pre>
+    <code id="result"></code>
+
+    </pre>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script>
+        const inputField = document.getElementById('urlInput');
+        inputField.addEventListener('keyup', decodeJWT)
+
+        function decodeJWT() {
+            const url = document.getElementById('urlInput').value;
+
+            try {
+                // Extract the JWT token from the URL
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const passthroughQuery = urlParams.get('passthroughquery');
+
+                // Extract the JWT (remove any extra parameters after '&')
+                const externalToken = passthroughQuery.split('&')[0].split('=')[1];
+
+                // Decode JWT using jwt-decode
+                const decoded = jwt_decode(externalToken);
+
+                // Display the username
+                if (decoded && decoded.username) {
+                    document.getElementById('result').innerText = `${decoded.username}`;
+                } else {
+                    document.getElementById('result').innerText = 'Invalid Token or Username not found.';
+                }
+            } catch (error) {
+                document.getElementById('result').innerText = 'Error decoding JWT.';
+                console.error(error);
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
