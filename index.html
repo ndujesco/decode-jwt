@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Examination Number </title>
+    <title>Decode JWT</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,39 +22,52 @@
 </head>
 
 <body>
-    <h1>Get Exam Number.</h1>
-    <input type="text" id="urlInput" placeholder="Paste the URL here" style="width: 80%; padding: 10px;">
+    <h1>Decode JWT.</h1>
+    <input type="text" id="tokenInput" placeholder="Paste the URL here" style="width: 80%; padding: 10px;">
     <pre>
     <code id="result"></code>
 
     </pre>
 
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script>
-        const inputField = document.getElementById('urlInput');
+
+
+
+        /**
+         * Minified by jsDelivr using Terser v5.19.2.
+         * Original file: /npm/jwt-decode@3.1.2/build/jwt-decode.js
+         *
+         * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+         */
+        !function (e) { "function" == typeof define && define.amd ? define(e) : e() }((function () { "use strict"; function e(e) { this.message = e } e.prototype = new Error, e.prototype.name = "InvalidCharacterError"; var n = "undefined" != typeof window && window.atob && window.atob.bind(window) || function (n) { var t = String(n).replace(/=+$/, ""); if (t.length % 4 == 1) throw new e("'atob' failed: The string to be decoded is not correctly encoded."); for (var r, o, i = 0, a = 0, d = ""; o = t.charAt(a++); ~o && (r = i % 4 ? 64 * r + o : o, i++ % 4) ? d += String.fromCharCode(255 & r >> (-2 * i & 6)) : 0)o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o); return d }; function t(e) { var t = e.replace(/-/g, "+").replace(/_/g, "/"); switch (t.length % 4) { case 0: break; case 2: t += "=="; break; case 3: t += "="; break; default: throw "Illegal base64url string!" }try { return function (e) { return decodeURIComponent(n(e).replace(/(.)/g, (function (e, n) { var t = n.charCodeAt(0).toString(16).toUpperCase(); return t.length < 2 && (t = "0" + t), "%" + t }))) }(t) } catch (e) { return n(t) } } function r(e) { this.message = e } function o(e, n) { if ("string" != typeof e) throw new r("Invalid token specified"); var o = !0 === (n = n || {}).header ? 0 : 1; try { return JSON.parse(t(e.split(".")[o])) } catch (e) { throw new r("Invalid token specified: " + e.message) } } r.prototype = new Error, r.prototype.name = "InvalidTokenError", window && ("function" == typeof window.define && window.define.amd ? window.define("jwt_decode", (function () { return o })) : window && (window.jwt_decode = o)) }));
+        //# sourceMappingURL=/sm/0a1993eaaca959f022d8cfa3468ac4af037652225e251eb84302d7be2af6b198.map
+
+
+
+    </script>
+
+
+    <script>
+        const inputField = document.getElementById('tokenInput');
         inputField.addEventListener('keyup', decodeJWT)
 
         function decodeJWT() {
-            const url = document.getElementById('urlInput').value;
+            const token = inputField.value;
 
             try {
-                // Extract the JWT token from the URL
-                const urlParams = new URLSearchParams(url.split('?')[1]);
-                const passthroughQuery = urlParams.get('passthroughquery');
 
-                // Extract the JWT (remove any extra parameters after '&')
-                const externalToken = passthroughQuery.split('&')[0].split('=')[1];
-
-                // Decode JWT using jwt-decode
-                const decoded = jwt_decode(externalToken);
+                const decoded = jwt_decode(token);
+                console.log(decoded)
 
                 // Display the username
-                if (decoded && decoded.username) {
-                    document.getElementById('result').innerText = `${decoded.username}`;
+                if (decoded) {
+                    document.getElementById('result').innerText = `${JSON.stringify(decoded)}`;
                 } else {
-                    document.getElementById('result').innerText = 'Invalid Token or Username not found.';
+                    document.getElementById('result').innerText = 'Invalid Token.';
                 }
             } catch (error) {
+                console.log(error);
+
                 document.getElementById('result').innerText = 'Error decoding JWT.';
                 console.error(error);
             }
