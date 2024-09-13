@@ -18,19 +18,26 @@
             font-size: 1.5rem;
             color: #333;
         }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px 0;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Decode JWT.</h1>
-    <input type="text" id="tokenInput" placeholder="Paste the URL here" style="width: 80%; padding: 10px;">
+    <h1>Decode JWT</h1>
+    <input type="text" id="tokenInput" placeholder="Paste the token here" style="width: 80%; padding: 10px;">
     <pre>
     <code id="result"></code>
-
     </pre>
 
     <script>
-
 
 
         /**
@@ -43,38 +50,38 @@
         //# sourceMappingURL=/sm/0a1993eaaca959f022d8cfa3468ac4af037652225e251eb84302d7be2af6b198.map
 
 
-
     </script>
-
 
     <script>
         const inputField = document.getElementById('tokenInput');
-        inputField.addEventListener('keyup', decodeJWT)
+        inputField.addEventListener('keyup', decodeJWT);
 
         function decodeJWT() {
             const token = inputField.value;
 
             try {
-
                 const decoded = jwt_decode(token);
-                console.log(decoded)
+                console.log(decoded);
 
-                // Display the username
                 if (decoded) {
-                    document.getElementById('result').innerText = `${JSON.stringify(decoded)}`;
+                    // Create an HTML string with keys and values
+                    let resultHTML = '<ul>';
+                    for (const [key, value] of Object.entries(decoded)) {
+                        resultHTML += `<li><strong>${key}:</strong> ${value}</li>`;
+                    }
+                    resultHTML += '</ul>';
+
+                    document.getElementById('result').innerHTML = resultHTML;
                 } else {
                     document.getElementById('result').innerText = 'Invalid Token.';
                 }
             } catch (error) {
                 console.log(error);
-
                 document.getElementById('result').innerText = 'Error decoding JWT.';
                 console.error(error);
             }
         }
     </script>
-
-
 </body>
 
 </html>
